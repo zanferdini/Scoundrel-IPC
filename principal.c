@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 // Função para processar o dano do monstro.
-   Recebe a vida atual e o valor do monstro, retorna a nova vida.
+//rcebe a vida atual e o valor do monstro, retorna a nova vida.
 
 int processar_monstro(int vidaatual, int cartamonstro) {
     int nova_vida = vida_atual - carta_monstro;
@@ -13,7 +13,7 @@ int processar_monstro(int vidaatual, int cartamonstro) {
 }
 
 // Função para processar a cura da poção.
-  // Garante que a vida não ultrapasse o limite máximo de 20.
+//garantirque a vida não ultrapasse o limite máximo de 20.
 
 int processarpocao(int vida_atual, int carta_pocao) {
     int nova_vida = vida_atual + carta_pocao;
