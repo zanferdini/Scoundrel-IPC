@@ -1,26 +1,45 @@
-#include <stdio.h>
+//alunos: Gustavo Hidalgo Salinas 17894628
+//Gael 
+//João 
+//ideias e se fizermos uma função para cada carta, ai fica mais facil eu acho
+#include<stdio.h>
+int vida, cartam, cartav;
+int monstro ( cartam, vida , cartaa){
+    //cartam vai ser definidio depois
+    vida= vida-cartam;
+    return(vida);
+}
+int poção( cartav, vida ){
+    vida=vida+cartav;//carta v vai ser definido depois 
+    return(vida);
+}
+int arma(cartam,cartaa, vida){
+    if(cartaa>=cartam){
+        vida= vida;
+        cartaa=cartam;//vira o valor
+        return(vida, cartam);
+    }
+    if(cartaa<cartam){//vida do monstro maior que o da arma
+        vida= vida-(cartam-cartaa);
+        return(vida);
+    }
+}
 
-// uma função é <tipo><nome>(>tipo 1><par1>;... <TIPON><parn>){
-// <decalração de variávei>
-//<comand 1>;
-//return<valor>); o valor tem que ser o mesmo do tipo da função 
-//}
-//argc, argv curiosidade 
-int fatorial(int x){
-    int i,resultado=1;
-    for(i=0;i<=x;i++){
-        resultado=(x-i)*resultado;
+
+int main()
+{
+    printf("----SCOUNDREL GAME----");
+
+    //primeiro me preocupo apenas com o baralho 
+    int baralho[38];
+    int descarte[38];
+    int i, pulo;// criamos a pulo caso o jogador decida pular 
+    //COLOCAR SORTEIO 
+    //vamos criar varáveis para a vida 
+    int vida, vmax=20;//criamos uma vida máxima para a vida nao ultrapassar ela
+    for(i=0; i<32; i++){
+        printf("%d", baralho[i]);
 
     }
-    return(resultado);    
-}
-int main(){
-    int n1,combinacao,n2;
-    do{
-    printf("digite dois numeros inteiros para calcular a combinaão de n k a k");
-    scanf("%d %d", &n1,&n2);
-    combinacao=fatorial(n1)/fatorial(n2)*fatorial(n1-n2);
-    }while(n1<0 || n2<0);
-    printf("teu valor é %d", combinacao);
     return 0;
 }
