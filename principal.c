@@ -79,7 +79,7 @@ int main() {
         baralho[i]=baralho[j];
         baralho[j]=temp;
     }
-//GAEL-vulgo claude
+//GAEL-vulgo claude- nao esquece de criar o for inicial- para cada jogada
 
 
 
