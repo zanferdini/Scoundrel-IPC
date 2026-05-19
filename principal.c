@@ -79,6 +79,23 @@ int main() {
         baralho[i]=baralho[j];
         baralho[j]=temp;
     }
+//GAEL-vulgo claude
+
+
+
+
+
+
+
+
+
+//JOAO
+
+
+
+
+
     
+//GUSTAVO    
     return 0;
 }
