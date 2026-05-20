@@ -1,20 +1,19 @@
  F para feito e 0 para não
 
 -introdução- NAO ESQUECER COLOCAR NOME E NUSP
--estrutura- carta e jogador como struct
--funções de interação- monsstro, poçao, arma
--exibiçao da mesa como função(gustavo teve essa ideia, minha parte, vou tentar aplicar)
--abre int main()
--inicializa o jogador
--preenche o baralho
--randomiza o baralho
+-estrutura- carta e jogador como struct F
+-funções de interação- monsstro, poçao, arma F
+-abre int main() F
+-inicializa o jogadorF
+-preenche o baralhoF
+-randomiza o baralhoF
 -começa o jogo- while- acho q crair um avariável para controle tipo jogo=1fora do while
--convoca das profundezas a função da exibição mesa
+-convoca das profundezas a função da exibição mesa F 
 -pedir para o usuário escolher as cartas- guardar em uma variável e colocar essa carta no vazio
 -processa monstro
 -processa arma
 -processa poçao- aqui vai precisar de else if 
--coloca a carta no vazio, coisa asssim mesa[indice].tipo = vazi;
+-coloca a carta no vazio, coisa asssim mesa[indice].tipo = vaziO;
 -fecha o wile
 -if final- sse vida do jogador for <=0 printf vc perdeu, se nao(else) parabens vc ganhou 
 
