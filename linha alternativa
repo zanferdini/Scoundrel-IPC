@@ -1,1 +1,122 @@
 
+// Alunos: Gustavo Hidalgo Salinas (USP: 17894628)
+//         Gael (USP: COLOCAR AQUI)
+//         João (USP: 13783075)
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+//Sruct que implementa a carta
+struct carta{
+	int numero;
+	char naipe; //Os naipes possíveis são: 'o' (ouros), 'e' (espadas), 'c' (copas) e 'p' (paus) .
+	int dentro; //Será utilizado apenas para cartas da categoria arma, caso contrário será sempre idêntico ao número.
+};
+
+// Função para processar o dano do monstro.
+//recebe a vida atual e o valor do monstro, retorna a nova vida.
+
+int processar_monstro(int vida_atual, int carta_monstro) {
+    int nova_vida = vida_atual - carta_monstro;
+    return nova_vida;
+}
+
+// Função para processar a cura da poção.
+//garantir que a vida não ultrapasse o limite máximo de 20.
+
+int processarpocao(int vida_atual, int carta_pocao) {
+    int nova_vida = vida_atual + carta_pocao;
+   
+    if (nova_vida > 20) {
+        nova_vida = 20; // Limite máximo de vida
+    }
+    
+    return nova_vida;
+}
+
+int calcular_dano_arma(int carta_monstro, int valor_arma, int vida_atual) {
+    if (valor_arma >= carta_monstro) {
+        return vida_atual; // Não toma dano, a vida continua igual
+    } else {
+        vida_atual = vida_atual - (carta_monstro - valor_arma); 
+        return vida_atual; // Devolve a nova vida calculad
+    }
+}
+
+//vamos precisar pegar uma variável para guardar o valor do monstro ultimo, vai virar o teto da arma!
+int main() {
+    printf("---- SCOUNDREL GAME ----\n");
+    srand(time(NULL));//aleatoriedade
+    struct carta baralho[44];  
+    int i,j;
+    int pulo = 0; // Marcador para saber se o jogador pulou aa Sala
+    
+    int vida = 20; // Vida inicial
+    int arma_equipada = 0; // Começa sem arma 0 de dano
+    int ultimo_monstro_da_arma = 0; // variável para deixar o teto da arma 
+    int posicao=0;
+   
+    //após declaração das variávei seu pensei sobre os naipes, as 26 primeiras cartas
+    // serão monstro, ta na ordem de força do baralho ein
+    //Colocando as cartas no baralho TEM QUE TIRAR AS CARTAS QUE NAO TAO NO JOGO
+    j = 0;
+    for (i=0; i < 52; i++){
+	    switch (i/13){
+		    case 0:
+			    if (i%13 != 0 && i%13 < 10){
+	    		    	baralho[j].numero = i%13 + 1;
+				baralho[j].naipe = 'o';
+				baralho[j].dentro =  1;
+				j++;
+			    }
+			    break;
+		    case 1:	
+			    if (i%13 != 0 && i%13 < 10){
+	    		    	baralho[j].numero = i%13 + 1;
+			    	baralho[j].naipe = 'c';
+				baralho[j].dentro = 1;
+			    	j++;
+			    }
+			    break;
+		   case 2:
+			    baralho[j].numero = i%13 + 1;
+			    baralho[j].naipe = 'e';
+			    baralho[j].dentro = 1;
+			    j++;
+			    break;
+		   default:
+			    baralho[j].numero = i%13 + 1;
+			    baralho[j].naipe = 'p';
+			    baralho[j].dentro = 1;
+			    j++;
+			    break;
+	    }
+    }
+
+    //promto agr posto o baralho devemos embaralhar JA DECLAREI O SRAND(TIME(NULL))
+    for(int i=43; i>0; i--){
+        int j=rand()%(i+1);
+        int temp = baralho[i];
+        baralho[i] = baralho[j];
+        baralho[j] = temp;
+    }
+//GAEL-vulgo claude- nao esquece de criar o for inicial- para cada jogada
+
+
+
+
+
+
+
+
+
+//JOAO
+
+
+
+
+
+    
+//GUSTAVO    
+    return 0;
+}
