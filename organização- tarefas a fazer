@@ -15,6 +15,7 @@
 -processa arma
 -processa poçao- aqui vai precisar de else if 
 -coloca a carta no vazio, coisa asssim mesa[indice].tipo = vazi;
+-fecha o wile
 -if final- sse vida do jogador for <=0 printf vc perdeu, se nao(else) parabens vc ganhou 
 
 
