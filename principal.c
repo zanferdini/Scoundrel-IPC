@@ -170,6 +170,30 @@ int main() {
             }
         }
         //aqui cria um else para escolha e aplicações dos bagulhos, dano poçao etc
+        else {
+            // indice pro programa não ler a carta diferente da qual o usuario escolheu
+            int indice = escolha - 1;
+
+            // ve se o usuario colocou uma entrada valida e se o slot da carta nao ta vazio
+            if (escolha >= 1 && escolha <= 4 && mesa[indice].numero != 0) {
+                //aqui dentro desse if que comeca de fato a checar o tipo das cartas e processar elas 
+                // processando a pocao e atualizando avida
+                if (mesa[indice].naipe == 'o') {
+                    vida = processarpocao(vida, mesa[indice].numero);
+                // movendo a pocao usada para o descarte e colocando o valor dela na mesa igual a zero
+
+                    descarte[topo_descarte] = mesa[indice];
+                    topo_descarte++;
+                    mesa[indice].numero = 0;
+
+                    cartas_restantes_no_total--;
+                }
+
+
+            } else {
+                printf("\nOpcao invalida ou espaco ja vazio!\n");
+            }
+    } 
         int descartadas;// para termo uma lista circular as descartadas tem que chegar a zero, no fim mas ainda dentro do else
         descartadas--;
         //ainda dentro do else da analise da jogada com escolha sendo diferente do pulo ou aída
