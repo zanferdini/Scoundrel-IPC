@@ -27,16 +27,21 @@ int processarpocao(int vida_atual, int carta_pocao) {
     return nova_vida;
 }
 
-int calcular_dano_arma(int carta_monstro, int valor_arma, int vida_atual) {
-    if (valor_arma >= carta_monstro) {
-        return vida_atual; // Não toma dano, a vida continua igual
+int calcular_dano_arma(int carta_monstro, int valor_arma, int vida_atual, int ultimo_monstro) {
+    if (ultimo_monstro > 0 && carta_monstro >= ultimo_monstro) {
+        printf("\n>>> Monstro muito forte para a sequencia da arma! Lutou desarmado e tomou dano inteiro! <<<\n");
+        vida_atual = vida_atual - carta_monstro;
     } else {
-        vida_atual = vida_atual - (carta_monstro - valor_arma); 
-        return vida_atual; // Devolve a nova vida calculad
+        if (valor_arma >= carta_monstro) {
+            return vida_atual; 
+        } else {
+            vida_atual = vida_atual - (carta_monstro - valor_arma); 
+            return vida_atual; 
+        }
     }
+    return vida_atual;
 }
 
-//vamos precisar pegar uma variável para guardar o valor do monstro ultimo, vai virar o teto da arma!
 int main() {
     printf("---- SCOUNDREL GAME ----\n");
     srand(time(NULL));//aleatoriedade
@@ -53,6 +58,8 @@ int main() {
     int ultimo_monstro_da_arma = 0; // variável para deixar o teto da arma 
     int posicao = 0;
     int topo_descarte = 0; // Contador de quantas cartas já foram para o descarte- meio que um índice
+    
+    int cartas_restantes_no_total = 44; // Termômetro para o fim da Fila Circular
    
     j = 0;
     for (i=0; i < 52; i++){
@@ -62,7 +69,7 @@ int main() {
             case 0:
                 if (valor_carta >= 2 && valor_carta <= 10){
                     baralho[j].numero = valor_carta;
-                    baralho[j].naipe = 'o'; // Ouros -> Poção
+                    baralho[j].naipe = 'o';
                     baralho[j].dentro =  valor_carta;
                     j++;
                 }
@@ -70,7 +77,7 @@ int main() {
             case 1: 
                 if (valor_carta >= 2 && valor_carta <= 10){
                     baralho[j].numero = valor_carta;
-                    baralho[j].naipe = 'e'; // Espadas -> Arma (Corrigido para a regra real!)
+                    baralho[j].naipe = 'e'; // Ajustado: Case 1 gera Espadas (Armas)
                     baralho[j].dentro = valor_carta;
                     j++;
                 }
@@ -81,7 +88,7 @@ int main() {
                 } else {
                     baralho[j].numero = valor_carta;
                 }
-                baralho[j].naipe = 'c'; // Copas -> Monstro
+                baralho[j].naipe = 'c'; // Ajustado: Case 2 gera Copas (Monstros)
                 baralho[j].dentro = baralho[j].numero;
                 j++;
                 break;
@@ -91,24 +98,21 @@ int main() {
                 } else {
                     baralho[j].numero = valor_carta;
                 }
-                baralho[j].naipe = 'p'; // Paus -> Monstro
+                baralho[j].naipe = 'p';
                 baralho[j].dentro = baralho[j].numero;
                 j++;
                 break;
         }
     }
 
-    //promto agr posto o baralho devemos embaralhar JA DECLAREI O SRAND(TIME(NULL))
     for(int i=43; i>0; i--){
         int j=rand()%(i+1);
-        struct carta temp = baralho[i];
+        carta temp = baralho[i];
         baralho[i] = baralho[j];
         baralho[j] = temp;
     }
 
-//GAEL-vulgo claude- nao esquece de criar o for inicial- para cada jogada
-
-    // AJUSTE: A primeira mesa é puxada aqui fora, para não resetar a mesa toda rodada!
+    // Inicialização da primeira mesa tem que fazer manualmente- depois vai ajustando conforme passa
     int topo_baralho = 0;
     for (int k = 0; k < 4; k++) {
         mesa[k] = baralho[topo_baralho];
@@ -116,92 +120,132 @@ int main() {
     }
 
     int jogo = 1;
-    while (jogo == 1 && vida > 0) {
-
-//GUSTAVO    
+    while (jogo == 1 && vida > 0) { 
+        //aqui vamos mostrar a sala toda a rodada, primeiro de tudo!
         printf("\n=========================================\n");
-        printf("SALA ATUAL: %d | Vida: %d/20 | Arma: %d\n", sala, vida, arma_equipada);
-        //PULO=0 pode pular 
+        printf("SALA ATUAL: %d | Vida: %d/20 | Arma: %d (Teto: %d)\n", sala, vida, arma_equipada, ultimo_monstro_da_arma);
+        
         if (pulo == 0) {
             printf("Fuga da Sala: DISPONIVEL (Digite 5 para pular)\n");
         } else {
-            //pulou a passada
             printf("Fuga da Sala: BLOQUEADA (Disponivel apenas após limpar uma sala)\n");
         }
         
-        printf("Cartas ja descartadas: %d\n", topo_descarte);
+        printf("Cartas ja descartadas: %d | Restantes no Jogo: %d\n", topo_descarte, cartas_restantes_no_total);
         printf("-----------------------------------------\n");
         printf("MESA ATUAL:\n");
-        int cartas_restantes = 0;
+        int cartas_restantes_na_mesa = 0;
         for (int k = 0; k < 4; k++) {
             if (mesa[k].numero == 0) {
                 printf("[%d] [Espaco Vazio]\n", k + 1);
             } else {
-                cartas_restantes++;
-                if (mesa[k].naipe == 'c') printf("[%d] Monstro (Copas): Forca %d\n", k + 1, mesa[k].numero);
-                if (mesa[k].naipe == 'p') printf("[%d] Monstro (Paus): Forca %d\n", k + 1, mesa[k].numero);
+                cartas_restantes_na_mesa++;
                 if (mesa[k].naipe == 'e') printf("[%d] Arma (Espadas): Forca %d\n", k + 1, mesa[k].numero);
+                if (mesa[k].naipe == 'p') printf("[%d] Monstro (Paus): Forca %d\n", k + 1, mesa[k].numero);
+                if (mesa[k].naipe == 'c') printf("[%d] Monstro (Copas): Forca %d\n", k + 1, mesa[k].numero);
                 if (mesa[k].naipe == 'o') printf("[%d] Pocao (Ouros): Cura %d\n", k + 1, mesa[k].numero);
             }
         }
         printf("======================================\n");
+        
         printf("\nEscolha uma carta (1 a 4), 5 para usar o pulo, ou 0 para sair: ");
+        //guardamos a escolha
         int escolha;
         scanf("%d", &escolha);
 
         if (escolha == 0) {
-            jogo = 0; 
+            jogo = 0; //pediu para sair
         } 
         else if (escolha == 5) {
-            if (pulo == 1) {
-                printf("\n[Erro] Voce nao pode pular duas salas seguidas!\n");
+            if (cartas_restantes_na_mesa < 4) {
+                printf("\n[Erro] Voce nao pode pular! Ja interagiu com cartas desta sala.\n");//tentou pular depois de mexer em algo
+            }
+            else if (pulo == 1) {
+                printf("\n[Erro] Voce nao pode pular duas salas seguidas!\n");//tentou pular duas vezes
             } 
             else {
                 printf("\n>>> PULO ATIVADO! Mudando para a proxima sala... <<<\n");
-                pulo = 1; // Trava o pulo porque o jogador JÁ PULOU NA PASSADA
-                sala++; 
+                pulo = 1; 
+                sala++;//muda a sala 
                 
-                // fila circular aqui- para o pulo dar no fim do baralho- vai sair qnd  acarta descartada for 0, ou seja precia de uma variavel para esse decarte de cartas]
-                //ex: descarte -- no fim do while
                 for (int k = 0; k < 4; k++) {
                     mesa[k] = baralho[topo_baralho % 44];
                     topo_baralho++;
                 }
             }
         }
-        //aqui cria um else para escolha e aplicações dos bagulhos, dano poçao etc
-        else {
-            // indice pro programa não ler a carta diferente da qual o usuario escolheu
+        else if (escolha >= 1 && escolha <= 4) {
             int indice = escolha - 1;
 
-            // ve se o usuario colocou uma entrada valida e se o slot da carta nao ta vazio
-            if (escolha >= 1 && escolha <= 4 && mesa[indice].numero != 0) {
-                //aqui dentro desse if que comeca de fato a checar o tipo das cartas e processar elas 
-                // processando a pocao e atualizando avida
+            if (mesa[indice].numero != 0) {
+                
+                //processar as cartas- utilizamos as funções criadas para melhor organização0
+                
+                // 1. Caso seja Poção (Ouros)
                 if (mesa[indice].naipe == 'o') {
                     vida = processarpocao(vida, mesa[indice].numero);
-                // movendo a pocao usada para o descarte e colocando o valor dela na mesa igual a zero
-
-                    descarte[topo_descarte] = mesa[indice];
-                    topo_descarte++;
-                    mesa[indice].numero = 0;
-
-                    cartas_restantes_no_total--;
+                }
+                // 2. Caso seja Arma (Espadas)
+                else if (mesa[indice].naipe == 'e') {
+                    arma_equipada = mesa[indice].numero;
+                    ultimo_monstro_da_arma = 0; // Equipar nova arma zera o teto de sequência
+                }
+                // 3. Caso seja Monstro (Copas ou Paus)
+                else if (mesa[indice].naipe == 'c' || mesa[indice].naipe == 'p') {
+                    if (arma_equipada > 0) {
+                        vida = calcular_dano_arma(mesa[indice].numero, arma_equipada, vida, ultimo_monstro_da_arma);
+                        ultimo_monstro_da_arma = mesa[indice].numero;
+                    } else {
+                        vida = processar_monstro(vida, mesa[indice].numero);
+                    }
                 }
 
+                //sistema de limpesa- aqui utilizamos a ideia de lista circular para facilitar a mecânica "pulo"
+                descarte[topo_descarte] = mesa[indice];
+                topo_descarte++;
+                mesa[indice].numero = 0; // libera o espaço na mesa
+                cartas_restantes_na_mesa--;
+                
+                cartas_restantes_no_total--; // controle lista circula diminuindo- vai acabar qnd chegar  azero as cartas
+
+                // condição de parada (vitoria)
+                if (cartas_restantes_no_total <= 0) {
+                    jogo = 2; 
+                }
+                // avanço de sala (quando resta 1 ou 0 cartas na mesa)
+                else if (cartas_restantes_na_mesa <= 1) {
+                    printf("\n>>> Sala limpa! Avançando para a proxima sala. <<<\n");
+                    sala++;
+                    pulo = 0; // Restaura o direito de usar a fuga
+                    
+                    for (int k = 0; k < 4; k++) {
+                        // Só puxa se houver cartas inéditas disponíveis em jogo
+                        if (cartas_restantes_no_total > cartas_restantes_na_mesa) {
+                            mesa[k] = baralho[topo_baralho % 44];
+                            topo_baralho++;
+                        } else {
+                            mesa[k].numero = 0; // Deixa o slot vazio se o baralho real zerar
+                        }
+                    }
+                }
 
             } else {
-                printf("\nOpcao invalida ou espaco ja vazio!\n");
+                printf("\n[Erro] Esse espaco ja esta vazio! Escolha outro.\n");
             }
-    } 
-        int descartadas;// para termo uma lista circular as descartadas tem que chegar a zero, no fim mas ainda dentro do else
-        descartadas--;
-        //ainda dentro do else da analise da jogada com escolha sendo diferente do pulo ou aída
-        if(descartadas<=0){
-            jogo=3;//agora finalmente acaba a lista circular
+        } else {
+            printf("\nOpcao invalida!\n");
+        }
+    }
 
-        // O João deve continuar desenvolvendo a lógica das escolhas 1 a 4 a partir daqui!
-    } // Fechamento do While que estava faltando no seu código original
+    // m,ensagens de encerramento do jogo fora do loop- as opções de sair
+    if (vida <= 0) {
+        printf("\nDERROTA- sua vida zero :(\n");
+    } 
+    else if (jogo == 2) {
+        printf("\nPARABENS! voce acabou o baralho e VENCEU!\n");
+    } else {
+        printf("\njogo encerrado voluntariamente, até a proxima.\n");
+    }
         
     return 0;
 }
