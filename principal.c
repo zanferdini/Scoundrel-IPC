@@ -169,7 +169,13 @@ int main() {
                 }
             }
         }
-        
+        //aqui cria um else para escolha e aplicações dos bagulhos, dano poçao etc
+        int descartadas;// para termo uma lista circular as descartadas tem que chegar a zero, no fim mas ainda dentro do else
+        descartadas--;
+        //ainda dentro do else da analise da jogada com escolha sendo diferente do pulo ou aída
+        if(descartadas<=0){
+            jogo=0;//agora finalmente acaba a lista circular
+
         // O João deve continuar desenvolvendo a lógica das escolhas 1 a 4 a partir daqui!
     } // Fechamento do While que estava faltando no seu código original
         
