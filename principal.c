@@ -161,7 +161,8 @@ int main() {
                 pulo = 1; // Trava o pulo porque o jogador JÁ PULOU NA PASSADA
                 sala++; 
                 
-                // FILA CIRCULAR AQUI: O '% 44' faz o baralho dar a volta caso passe de 43!
+                // fila circular aqui- para o pulo dar no fim do baralho- vai sair qnd  acarta descartada for 0, ou seja precia de uma variavel para esse decarte de cartas]
+                //ex: descarte -- no fim do while
                 for (int k = 0; k < 4; k++) {
                     mesa[k] = baralho[topo_baralho % 44];
                     topo_baralho++;
