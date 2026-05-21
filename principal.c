@@ -174,7 +174,7 @@ int main() {
         descartadas--;
         //ainda dentro do else da analise da jogada com escolha sendo diferente do pulo ou aída
         if(descartadas<=0){
-            jogo=0;//agora finalmente acaba a lista circular
+            jogo=3;//agora finalmente acaba a lista circular
 
         // O João deve continuar desenvolvendo a lógica das escolhas 1 a 4 a partir daqui!
     } // Fechamento do While que estava faltando no seu código original
