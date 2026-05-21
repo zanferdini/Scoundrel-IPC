@@ -108,16 +108,15 @@ int main() {
 
 //GAEL-vulgo claude- nao esquece de criar o for inicial- para cada jogada
 
+    int jogo = 1;
+    while (jogo == 1 && vida > 0) {
+
     // Puxando as primeiras 4 cartas do baralho para inicializar a mesa de testes
     int topo_baralho = 0;
     for (int k = 0; k < 4; k++) {
         mesa[k] = baralho[topo_baralho];
         topo_baralho++;
     }
-
-    int jogo = 1;
-    while (jogo == 1 && vida > 0) {
-
 //GUSTAVO    
         printf("\n=========================================\n");
         printf("SALA ATUAL: %d | Vida: %d/20 | Arma: %d\n", sala, vida, arma_equipada);
@@ -172,6 +171,6 @@ int main() {
                 }// aqui qnd reiniciar o lista circular nao esquecer, tem que tirar 1 carta, algo assim
             }
         }
+        
     return 0;
 }
-   
