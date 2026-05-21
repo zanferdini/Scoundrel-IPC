@@ -62,7 +62,7 @@ int main() {
             case 0:
                 if (valor_carta >= 2 && valor_carta <= 10){
                     baralho[j].numero = valor_carta;
-                    baralho[j].naipe = 'o';
+                    baralho[j].naipe = 'o'; // Ouros -> Poção
                     baralho[j].dentro =  valor_carta;
                     j++;
                 }
@@ -70,7 +70,7 @@ int main() {
             case 1: 
                 if (valor_carta >= 2 && valor_carta <= 10){
                     baralho[j].numero = valor_carta;
-                    baralho[j].naipe = 'c';
+                    baralho[j].naipe = 'e'; // Espadas -> Arma (Corrigido para a regra real!)
                     baralho[j].dentro = valor_carta;
                     j++;
                 }
@@ -81,7 +81,7 @@ int main() {
                 } else {
                     baralho[j].numero = valor_carta;
                 }
-                baralho[j].naipe = 'e';
+                baralho[j].naipe = 'c'; // Copas -> Monstro
                 baralho[j].dentro = baralho[j].numero;
                 j++;
                 break;
@@ -91,7 +91,7 @@ int main() {
                 } else {
                     baralho[j].numero = valor_carta;
                 }
-                baralho[j].naipe = 'p';
+                baralho[j].naipe = 'p'; // Paus -> Monstro
                 baralho[j].dentro = baralho[j].numero;
                 j++;
                 break;
@@ -108,15 +108,16 @@ int main() {
 
 //GAEL-vulgo claude- nao esquece de criar o for inicial- para cada jogada
 
-    int jogo = 1;
-    while (jogo == 1 && vida > 0) {
-
-    // Puxando as primeiras 4 cartas do baralho para inicializar a mesa de testes
+    // AJUSTE: A primeira mesa é puxada aqui fora, para não resetar a mesa toda rodada!
     int topo_baralho = 0;
     for (int k = 0; k < 4; k++) {
         mesa[k] = baralho[topo_baralho];
         topo_baralho++;
     }
+
+    int jogo = 1;
+    while (jogo == 1 && vida > 0) {
+
 //GUSTAVO    
         printf("\n=========================================\n");
         printf("SALA ATUAL: %d | Vida: %d/20 | Arma: %d\n", sala, vida, arma_equipada);
@@ -137,9 +138,9 @@ int main() {
                 printf("[%d] [Espaco Vazio]\n", k + 1);
             } else {
                 cartas_restantes++;
-                if (mesa[k].naipe == 'e') printf("[%d] Monstro (Espadas): Forca %d\n", k + 1, mesa[k].numero);
+                if (mesa[k].naipe == 'c') printf("[%d] Monstro (Copas): Forca %d\n", k + 1, mesa[k].numero);
                 if (mesa[k].naipe == 'p') printf("[%d] Monstro (Paus): Forca %d\n", k + 1, mesa[k].numero);
-                if (mesa[k].naipe == 'c') printf("[%d] Arma (Copas): Forca %d\n", k + 1, mesa[k].numero);
+                if (mesa[k].naipe == 'e') printf("[%d] Arma (Espadas): Forca %d\n", k + 1, mesa[k].numero);
                 if (mesa[k].naipe == 'o') printf("[%d] Pocao (Ouros): Cura %d\n", k + 1, mesa[k].numero);
             }
         }
@@ -160,17 +161,16 @@ int main() {
                 pulo = 1; // Trava o pulo porque o jogador JÁ PULOU NA PASSADA
                 sala++; 
                 
-                if (topo_baralho < 40) {//Limita pq se o cara pula na final da no mesmo
-                    for (int k = 0; k < 4; k++) {
-                        mesa[k] = baralho[topo_baralho];
-                        topo_baralho++;
-                    }
-                } else {
-                    printf("O baralho acabou!\n");
-                    jogo = 2; 
-                }// aqui qnd reiniciar o lista circular nao esquecer, tem que tirar 1 carta, algo assim
+                // FILA CIRCULAR AQUI: O '% 44' faz o baralho dar a volta caso passe de 43!
+                for (int k = 0; k < 4; k++) {
+                    mesa[k] = baralho[topo_baralho % 44];
+                    topo_baralho++;
+                }
             }
         }
+        
+        // O João deve continuar desenvolvendo a lógica das escolhas 1 a 4 a partir daqui!
+    } // Fechamento do While que estava faltando no seu código original
         
     return 0;
 }
